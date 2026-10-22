@@ -1,8 +1,9 @@
 package com.marin.hrov.feature.common.repository
 
-import com.marin.hrov.core.ActionResult
+import com.marin.hrov.core.OVResult
 import com.marin.hrov.feature.common.model.EmployeeInfo
+import kotlinx.coroutines.flow.Flow
 
 interface EmployeeInfoRepository { // not a fun interface: perhaps we add more methods here
-    fun employees(): ActionResult<List<EmployeeInfo>>
+    fun employees(): Flow<OVResult<List<EmployeeInfo>>>
 }

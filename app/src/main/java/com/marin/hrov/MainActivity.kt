@@ -11,14 +11,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import com.marin.hrov.feature.employeeDetails.presentation.EmployeeDetailsScreen
+import com.marin.hrov.feature.employeeList.presentation.EmployeeListScreen
+import com.marin.hrov.feature.renewals.RenewalsScreen
+import com.marin.hrov.ui.nav.EmployeeDetails
+import com.marin.hrov.ui.nav.EmployeeList
+import com.marin.hrov.ui.nav.Navigator
+import com.marin.hrov.ui.nav.Renewals
+import com.marin.hrov.ui.nav.rememberNavigationState
+import com.marin.hrov.ui.nav.topLevelRoutes
 import com.marin.hrov.ui.theme.HROVTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,58 +38,54 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@PreviewScreenSizes
 @Composable
 fun HROVApp() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    val navigationState = rememberNavigationState(
+        startRoute = EmployeeList,
+        topLevelRoutes = setOf(EmployeeList, Renewals)
+    )
+    val navigator = remember { Navigator(navigationState) }
+    val entryProvider = entryProvider {
+        entry<EmployeeList> {
+            EmployeeListScreen(onOpenEmployeeDetails = { employeeId ->
+                navigator.navigate(
+                    route = EmployeeDetails(
+                        employeeId
+                    )
+                )
+            })
+        }
+        entry<EmployeeDetails> { entryKey ->
+            EmployeeDetailsScreen(entryKey.employeeId)
+        }
+        entry<Renewals> {
+            RenewalsScreen()
+        }
+    }
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
-            AppDestinations.entries.forEach {
+            topLevelRoutes.forEach { (route, navBarItem) ->
                 item(
                     icon = {
                         Icon(
-                            painterResource(it.icon),
-                            contentDescription = it.label
+                            imageVector = navBarItem.icon,
+                            contentDescription = navBarItem.description
                         )
                     },
-                    label = { Text(it.label) },
-                    selected = it == currentDestination,
-                    onClick = { currentDestination = it }
+                    label = { Text(navBarItem.description) },
+                    selected = route == navigationState.topLevelRoute,
+                    onClick = { navigator.navigate(route) }
                 )
             }
         }
     ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
+            NavDisplay(
+                entries = navigationState.toDecoratedEntries(entryProvider),
+                onBack = { navigator.goBack() },
+                modifier = Modifier.padding(paddingValues = innerPadding)
             )
         }
-    }
-}
-
-enum class AppDestinations(
-    val label: String,
-    val icon: Int,
-) {
-    HOME("Home", R.drawable.ic_home),
-    FAVORITES("Favorites", R.drawable.ic_favorite),
-    PROFILE("Profile", R.drawable.ic_account_box),
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HROVTheme {
-        Greeting("Android")
     }
 }
