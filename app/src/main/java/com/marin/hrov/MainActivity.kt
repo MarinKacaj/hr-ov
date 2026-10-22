@@ -17,7 +17,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.marin.hrov.feature.employeeDetails.presentation.EmployeeDetailsScreen
 import com.marin.hrov.feature.employeeList.presentation.EmployeeListScreen
-import com.marin.hrov.feature.renewals.RenewalsScreen
+import com.marin.hrov.feature.renewals.presentation.RenewalsScreen
 import com.marin.hrov.ui.nav.EmployeeDetails
 import com.marin.hrov.ui.nav.EmployeeList
 import com.marin.hrov.ui.nav.Navigator

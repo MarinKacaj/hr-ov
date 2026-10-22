@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class EmployeeListViewModel(
-    private val getEmployeesUseCase: GetEmployeesUseCase,
+    private val getEmployeesUseCase: GetEmployeesUseCase
 ) : ViewModel() {
 
     // the name is a bit of Hungarian notation with extra steps,

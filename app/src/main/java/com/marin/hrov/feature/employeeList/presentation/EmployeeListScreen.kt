@@ -78,6 +78,7 @@ fun EmployeeListScreenContent(
             onSearchQueryChanged = onSearch,
             onSearchTriggered = onSearch
         )
+        // some filter chips here if I had more time: in order or not, employment status, etc
         when (output) {
             is EmployeeListViewModel.Output.Error -> {
                 ErrorComponent(errorDescription = output.description)

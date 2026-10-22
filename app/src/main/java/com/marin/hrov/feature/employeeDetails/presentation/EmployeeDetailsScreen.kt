@@ -3,7 +3,6 @@ package com.marin.hrov.feature.employeeDetails.presentation
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
@@ -30,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.marin.hrov.feature.common.model.EmployeeInfo
 import com.marin.hrov.feature.common.model.Subscription
+import com.marin.hrov.feature.common.presentation.DetailPropertyNameValuePair
 import com.marin.hrov.feature.common.presentation.ErrorComponent
 import com.marin.hrov.feature.common.presentation.LoadingComponent
 import com.marin.hrov.feature.common.presentation.description
@@ -136,21 +136,6 @@ fun EmployeeDetailsSuccess(employeeInfo: EmployeeInfo) {
     }
 }
 
-@Composable
-fun DetailPropertyNameValuePair(propertyName: String, value: String) {
-    Row(modifier = Modifier.padding(all = 8.dp)) { // no param modifier for simplicity
-        Text(
-            text = "$propertyName: ",
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.alignByBaseline()
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.alignByBaseline()
-        )
-    }
-}
 
 @Composable
 fun SubscriptionCard(subscription: Subscription) {

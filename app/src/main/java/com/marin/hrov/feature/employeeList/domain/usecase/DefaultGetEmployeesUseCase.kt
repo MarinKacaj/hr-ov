@@ -1,7 +1,7 @@
 package com.marin.hrov.feature.employeeList.domain.usecase
 
 import com.marin.hrov.core.OVResult
-import com.marin.hrov.feature.common.repository.EmployeeInfoRepository
+import com.marin.hrov.feature.common.repository.EmployeesInfoRepository
 import com.marin.hrov.feature.employeeList.domain.model.EmployeePublicTransportSituation
 import com.marin.hrov.feature.employeeList.domain.model.extractPublicTransportSituation
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import kotlin.time.Clock
 
 class DefaultGetEmployeesUseCase(
-    private val employeesInfoRepository: EmployeeInfoRepository,
+    private val employeesInfoRepository: EmployeesInfoRepository,
     private val clock: Clock
 ) : GetEmployeesUseCase {
 
@@ -22,9 +22,7 @@ class DefaultGetEmployeesUseCase(
                     data = employeeInfoResult.data.map { employeeInfo ->
                         employeeInfo.extractPublicTransportSituation(clock)
                     }.filter { employeeInfo ->
-                        val x = employeeInfo.matchesFilter(filter)
-                        println("EmployeeFilter > name: ${employeeInfo.firstName} ${employeeInfo.lastName}. matches $filter? - $x.")
-                        x
+                        employeeInfo.matchesFilter(filter)
                     }
                 )
             }

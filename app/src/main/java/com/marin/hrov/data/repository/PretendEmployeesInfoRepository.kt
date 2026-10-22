@@ -4,13 +4,13 @@ import com.marin.hrov.core.OVResult
 import com.marin.hrov.data.network.EmployeesInfoVirtualApi
 import com.marin.hrov.feature.common.model.EmployeeInfo
 import com.marin.hrov.feature.common.model.toDomainModels
-import com.marin.hrov.feature.common.repository.EmployeeInfoRepository
+import com.marin.hrov.feature.common.repository.EmployeesInfoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class PretendEmployeeInfoRepository(
+class PretendEmployeesInfoRepository(
     private val employeesInfoVirtualApi: EmployeesInfoVirtualApi
-) : EmployeeInfoRepository {
+) : EmployeesInfoRepository {
     override fun employees(): Flow<OVResult<List<EmployeeInfo>>> = flow {
         emit(OVResult.Loading)
         val employeeInfoResult = employeesInfoVirtualApi.employeeInfoItems()

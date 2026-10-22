@@ -2,12 +2,12 @@ package com.marin.hrov.feature.employeeDetails.domain.usecase
 
 import com.marin.hrov.core.OVResult
 import com.marin.hrov.feature.common.model.EmployeeInfo
-import com.marin.hrov.feature.common.repository.EmployeeInfoRepository
+import com.marin.hrov.feature.common.repository.EmployeesInfoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DefaultGetEmployeeDetailsUseCase(
-    private val employeesInfoRepository: EmployeeInfoRepository
+    private val employeesInfoRepository: EmployeesInfoRepository
 ) : GetEmployeeDetailsUseCase {
 
     override fun invoke(employeeId: String): Flow<OVResult<EmployeeInfo>> =
