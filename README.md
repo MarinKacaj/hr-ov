@@ -1,4 +1,4 @@
-# HR OV Management App - Marin Kaçaj
+# HR OV Management App
 
 ## Structure
 
