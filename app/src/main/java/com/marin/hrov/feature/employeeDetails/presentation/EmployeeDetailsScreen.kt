@@ -33,6 +33,7 @@ import com.marin.hrov.feature.common.model.Subscription
 import com.marin.hrov.feature.common.presentation.ErrorComponent
 import com.marin.hrov.feature.common.presentation.LoadingComponent
 import com.marin.hrov.feature.common.presentation.description
+import com.marin.hrov.feature.common.presentation.ongoingSubscriptionsTotalMonthly
 
 @Composable
 fun EmployeeDetailsScreen(employeeId: String) {
@@ -120,6 +121,13 @@ fun EmployeeDetailsSuccess(employeeInfo: EmployeeInfo) {
                 text = "Subscriptions",
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(all = 8.dp) // would have used MyTheme.spacing here
+            )
+            // assuming they're all in the same currency
+            // we could also split this by currency, but it'd be more complex
+            val currency = employeeInfo.subscriptions.first().currency
+            DetailPropertyNameValuePair(
+                propertyName = "Subscriptions monthly total",
+                value = "$currency ${employeeInfo.ongoingSubscriptionsTotalMonthly()}"
             )
         }
         employeeInfo.subscriptions.forEach { subscription ->
