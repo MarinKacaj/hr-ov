@@ -10,8 +10,8 @@ import com.marin.hrov.HrOvApp
 import com.marin.hrov.core.OVResult
 import com.marin.hrov.feature.common.model.EmploymentStatus
 import com.marin.hrov.feature.common.presentation.description
-import com.marin.hrov.feature.employeeList.domain.usecase.GetEmployeesUseCase
 import com.marin.hrov.feature.employeeList.domain.usecase.Filter
+import com.marin.hrov.feature.employeeList.domain.usecase.GetEmployeesUseCase
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.math.BigDecimal
 
 class EmployeeListViewModel(
     private val getEmployeesUseCase: GetEmployeesUseCase,
@@ -72,7 +73,11 @@ class EmployeeListViewModel(
                             isInOrder = employeeInfo.areAllSubscriptionsInOrder,
                             employmentStatusDescription = employeeInfo.employmentStatus.description()
                         )
-                    }.toPersistentList() // PersistentList is considered stable by compose
+                    }.toPersistentList(), // PersistentList is considered stable by compose
+                    subscriptionsTotal = employeesResult.data.fold(initial = BigDecimal.ZERO) { acc, curr ->
+                        acc + curr.subscriptionsMonthlyTotal
+                    },
+                    currency = employeesResult.data.firstOrNull()?.currency ?: ""
                 )
             }
         }
@@ -87,7 +92,11 @@ class EmployeeListViewModel(
         data object Loading : Output()
         data class Error(val description: String) : Output()
         // todo empty result set
-        data class Success(val items: PersistentList<EmployeeSituationItem>) : Output() {
+        data class Success(
+            val items: PersistentList<EmployeeSituationItem>,
+            val subscriptionsTotal: BigDecimal,
+            val currency: String
+        ) : Output() {
             data class EmployeeSituationItem(
                 val employeeId: String,
                 val title: String,
@@ -100,11 +109,11 @@ class EmployeeListViewModel(
     }
 
 
-
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val employeesUseCase = (this[APPLICATION_KEY] as HrOvApp).container.getEmployeesUseCase
+                val employeesUseCase =
+                    (this[APPLICATION_KEY] as HrOvApp).container.getEmployeesUseCase
                 EmployeeListViewModel(employeesUseCase)
             }
         }

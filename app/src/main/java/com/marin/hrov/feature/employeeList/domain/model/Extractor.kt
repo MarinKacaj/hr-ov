@@ -3,6 +3,7 @@ package com.marin.hrov.feature.employeeList.domain.model
 import com.marin.hrov.feature.common.model.EmployeeInfo
 import com.marin.hrov.feature.common.model.EmploymentStatus
 import com.marin.hrov.feature.common.model.SubscriptionStatus
+import com.marin.hrov.feature.common.presentation.ongoingSubscriptionsTotalMonthly
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -30,6 +31,8 @@ fun EmployeeInfo.extractPublicTransportSituation(clock: Clock): EmployeePublicTr
         avatarUrl = avatarUrl,
         jobTitle = jobTitle,
         employmentStatus = employmentStatus,
-        areAllSubscriptionsInOrder = areAllSubscriptionsInOrder
+        areAllSubscriptionsInOrder = areAllSubscriptionsInOrder,
+        subscriptionsMonthlyTotal = ongoingSubscriptionsTotalMonthly(),
+        currency = subscriptions.firstOrNull()?.currency ?: "" // we could also choose EUR for the NL, but this is not a great scalable choice
     )
 }

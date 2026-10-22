@@ -2,7 +2,6 @@ package com.marin.hrov.feature.employeeList.presentation
 
 import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -84,9 +82,11 @@ fun EmployeeListScreenContent(
             is EmployeeListViewModel.Output.Error -> {
                 ErrorComponent(errorDescription = output.description)
             }
+
             EmployeeListViewModel.Output.Loading -> {
                 LoadingComponent()
             }
+
             is EmployeeListViewModel.Output.Success -> {
                 EmployeeListSuccess(
                     successOutput = output,
@@ -107,6 +107,12 @@ fun EmployeeListSuccess(
             .fillMaxSize()
             .padding(all = 8.dp)
     ) {
+        item {
+            Text(
+                text = "(Unfiltered) Total monthly: ${successOutput.currency} ${successOutput.subscriptionsTotal}",
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
         items(
             items = successOutput.items,
             key = { employeeTransportSituation -> employeeTransportSituation.employeeId }
